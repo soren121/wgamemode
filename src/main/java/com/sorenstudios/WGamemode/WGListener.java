@@ -62,17 +62,12 @@ public class WGListener implements Listener {
 
         if ((event.getInventory().getType().equals(InventoryType.BREWING))
                 || (event.getInventory().getType().equals(InventoryType.CHEST))
-                || (event.getInventory().getType()
-                        .equals(InventoryType.CRAFTING))
-                || (event.getInventory().getType()
-                        .equals(InventoryType.DISPENSER))
-                || (event.getInventory().getType()
-                        .equals(InventoryType.ENCHANTING))
-                || (event.getInventory().getType()
-                        .equals(InventoryType.FURNACE))
+                || (event.getInventory().getType().equals(InventoryType.CRAFTING))
+                || (event.getInventory().getType().equals(InventoryType.DISPENSER))
+                || (event.getInventory().getType().equals(InventoryType.ENCHANTING))
+                || (event.getInventory().getType().equals(InventoryType.FURNACE))
                 || (event.getInventory().getType().equals(InventoryType.PLAYER))
-                || (event.getInventory().getType()
-                        .equals(InventoryType.WORKBENCH))) {
+                || (event.getInventory().getType().equals(InventoryType.WORKBENCH))) {
             if (this.plugin.getConfig().getBoolean("StopInteract")) {
                 if (this.plugin.waschanged.contains(player)) {
                     event.setCancelled(true);
