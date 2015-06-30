@@ -7,10 +7,9 @@ depend: [WorldGuard,WorldEdit]
 main: com.sorenstudios.WGamemode.WGamemode
 
 commands:
-  wgadd:
-    usage: /wgadd [region]
-    description: Add a region to the list
-  wgremove:
-    usage: /wgremove [region]
-    description: Remove a region to the list
-
+    wgadd:
+        usage: /wgadd [region]
+        description: Add a region to the list
+    wgremove:
+        usage: /wgremove [region]
+        description: Remove a region to the list

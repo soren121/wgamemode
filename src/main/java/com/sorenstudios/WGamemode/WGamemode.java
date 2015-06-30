@@ -19,78 +19,64 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
-public class WGamemode extends org.bukkit.plugin.java.JavaPlugin
-{
-public List<Player> waschanged = new ArrayList();
+public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
 
-public static WGamemode instance;
+    public List<Player> waschanged = new ArrayList();
 
-public WorldGuardPlugin getWorldGuard()
-{
- Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
- 
+    public static WGamemode instance;
 
- if ((plugin == null) || (!(plugin instanceof WorldGuardPlugin))) {
-   return null;
- }
- 
- return (WorldGuardPlugin)plugin;
-}
+    public WorldGuardPlugin getWorldGuard() {
+        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
 
+        if ((plugin == null) || (!(plugin instanceof WorldGuardPlugin))) {
+            return null;
+        }
 
-public void onDisable()
-{
- for (Player p : this.waschanged)
- {
-   if (p.getGameMode().equals(GameMode.CREATIVE))
-   {
-     p.setGameMode(GameMode.SURVIVAL);
-   }
- }
- System.out.println("WGamemode v." + getDescription().getVersion() + " disabled!");
-}
+        return (WorldGuardPlugin) plugin;
+    }
 
-public void onEnable()
-{
- instance = this;
- getServer().getPluginManager().registerEvents(new WGListener(this), this);
- loadConfig();
- commands();
- System.out.println("WGamemode v." + getDescription().getVersion() + " enabled!");
-}
+    public void onDisable() {
+        for (Player p : this.waschanged) {
+            if (p.getGameMode().equals(GameMode.CREATIVE)) {
+                p.setGameMode(GameMode.SURVIVAL);
+            }
+        }
+        System.out.println("WGamemode v." + getDescription().getVersion() + " disabled!");
+    }
 
+    public void onEnable() {
+        instance = this;
+        getServer().getPluginManager().registerEvents(new WGListener(this), this);
+        loadConfig();
+        commands();
+        System.out.println("WGamemode v." + getDescription().getVersion() + " enabled!");
+    }
 
-public void loadConfig()
-{
- List<String> list = new ArrayList();
- list.add("Gamemoderegion");
- getConfig().addDefault("Regions", list);
- getConfig().addDefault("StopItemDrop", Boolean.valueOf(true));
- getConfig().addDefault("StopInteract", Boolean.valueOf(true));
- getConfig().options().copyDefaults(true);
- saveConfig();
-}
+    public void loadConfig() {
+        List<String> list = new ArrayList();
+        list.add("Gamemoderegion");
+        getConfig().addDefault("Regions", list);
+        getConfig().addDefault("StopItemDrop", Boolean.valueOf(true));
+        getConfig().addDefault("StopInteract", Boolean.valueOf(true));
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+    }
 
-public void commands()
-{
- getCommand("wgadd").setExecutor(new com.sorenstudios.WGamemode.commands.wgadd());
- getCommand("wgremove").setExecutor(new wgremove());
-}
+    public void commands() {
+        getCommand("wgadd").setExecutor(new com.sorenstudios.WGamemode.commands.wgadd());
+        getCommand("wgremove").setExecutor(new wgremove());
+    }
 
-public Boolean isinregion(Player player)
-{
-     RegionContainer container = getWorldGuard().getRegionContainer();
-     RegionManager regions = container.get(player.getWorld());
-    
-     ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
-     for (ProtectedRegion r : set)
-     {
-    
-       if (getConfig().getList("Regions").contains(r.getId()))
-       {
-         return Boolean.valueOf(true);
-       }
-     }
-     return Boolean.valueOf(false);
+    public Boolean isinregion(Player player) {
+        RegionContainer container = getWorldGuard().getRegionContainer();
+        RegionManager regions = container.get(player.getWorld());
+
+        ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
+        for (ProtectedRegion r : set) {
+            if (getConfig().getList("Regions").contains(r.getId())) {
+                return Boolean.valueOf(true);
+            }
+        }
+        return Boolean.valueOf(false);
     }
 }
