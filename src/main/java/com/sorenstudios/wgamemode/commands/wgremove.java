@@ -18,7 +18,7 @@ public class wgremove implements CommandExecutor {
             if (player.hasPermission("wgamemode.remove")) {
                 if (args.length >= 1) {
                     String rs = args[0];
-                    List<String> list = this.plugin.getConfig().getStringList("Regions");
+                    List<String> list = this.plugin.getConfig().getStringList("regions");
                     
                     if (list.contains(rs)) {
                         list.remove(rs);
@@ -28,7 +28,7 @@ public class wgremove implements CommandExecutor {
                         return true;
                     }
                     
-                    this.plugin.getConfig().set("Regions", list);
+                    this.plugin.getConfig().set("regions", list);
                     this.plugin.saveConfig();
                     
                     player.sendMessage(ChatColor.DARK_GREEN + "Removed region " + rs);
@@ -43,7 +43,7 @@ public class wgremove implements CommandExecutor {
         }
         else if (args.length >= 1) {
             String rs = args[0];
-            List<String> list = this.plugin.getConfig().getStringList("Regions");
+            List<String> list = this.plugin.getConfig().getStringList("regions");
             
             if (list.contains(rs)) {
                 list.remove(rs);
@@ -53,7 +53,7 @@ public class wgremove implements CommandExecutor {
                 return true;
             }
             
-            this.plugin.getConfig().set("Regions", list);
+            this.plugin.getConfig().set("regions", list);
             this.plugin.saveConfig();
             
             this.plugin.getServer().getConsoleSender().sendMessage("Removed region " + rs);

@@ -6,8 +6,11 @@ import com.sk89q.worldguard.bukkit.RegionContainer;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
@@ -19,8 +22,8 @@ import org.bukkit.plugin.PluginManager;
 
 public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
 
-    public List<Player> waschanged = new ArrayList();
-
+    public Map<Player, GameMode> playersChanged = new HashMap<Player, GameMode>();
+    public static GameMode regionGamemode;
     public static WGamemode instance;
 
     public WorldGuardPlugin getWorldGuard() {
@@ -34,9 +37,10 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
     }
 
     public void onDisable() {
-        for (Player p : this.waschanged) {
-            if (p.getGameMode().equals(GameMode.CREATIVE)) {
-                p.setGameMode(GameMode.SURVIVAL);
+        for (Map.Entry<Player, GameMode> entry : this.playersChanged.entrySet()) {
+            Player p = entry.getKey();
+            if (p.getGameMode().equals(this.regionGamemode)) {
+                p.setGameMode(entry.getValue());
             }
         }
         getLogger().info("Disabled successfully.");
@@ -46,7 +50,10 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
         this.instance = this;
         
         getServer().getPluginManager().registerEvents(new WGListener(this), this);
-        loadConfig();
+        
+        saveDefaultConfig();
+        FileConfiguration config = getConfig();
+        this.regionGamemode = GameMode.valueOf(config.getString("gamemode").toUpperCase());
         
         getCommand("wgadd").setExecutor(new com.sorenstudios.wgamemode.commands.wgadd());
         getCommand("wgremove").setExecutor(new com.sorenstudios.wgamemode.commands.wgremove());
@@ -54,17 +61,12 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
         getLogger().info("Loaded successfully!");
     }
 
-    public void loadConfig() {
-        saveDefaultConfig();
-        FileConfiguration config = getConfig();
-    }
-
     public boolean isInRegion(Player player) {
         RegionManager regions = getWorldGuard().getRegionContainer().get(player.getWorld());
 
         ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
         for (ProtectedRegion r : set) {
-            if (getConfig().getList("Regions").contains(r.getId())) {
+            if (getConfig().getList("regions").contains(r.getId())) {
                 return true;
             }
         }

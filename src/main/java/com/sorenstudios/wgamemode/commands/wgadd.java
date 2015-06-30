@@ -18,10 +18,10 @@ public class wgadd implements CommandExecutor {
             if (player.hasPermission("wgamemode.add")) {
                 if (args.length >= 1) {
                     String rs = args[0];
-                    List<String> list = this.plugin.getConfig().getStringList("Regions");
+                    List<String> list = this.plugin.getConfig().getStringList("regions");
                     list.add(rs);
                     
-                    this.plugin.getConfig().set("Regions", list);
+                    this.plugin.getConfig().set("regions", list);
                     this.plugin.saveConfig();
                     
                     player.sendMessage(ChatColor.DARK_GREEN + "Added region " + rs);
@@ -36,10 +36,10 @@ public class wgadd implements CommandExecutor {
         }
         else if (args.length >= 1) {
             String rs = args[0];
-            List<String> list = this.plugin.getConfig().getStringList("Regions");
+            List<String> list = this.plugin.getConfig().getStringList("regions");
             list.add(rs);
             
-            this.plugin.getConfig().set("Regions", list);
+            this.plugin.getConfig().set("regions", list);
             this.plugin.saveConfig();
             
             this.plugin.getServer().getConsoleSender().sendMessage("Added region " + rs);

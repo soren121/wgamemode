@@ -1,8 +1,6 @@
 package com.sorenstudios.wgamemode;
 
-import java.util.List;
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,33 +24,34 @@ public class WGListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (this.plugin.isInRegion(player)) {
-            if ((player.getGameMode().equals(GameMode.SURVIVAL)) || (!this.plugin.waschanged.contains(player))) {
-                this.plugin.waschanged.add(player);
-                player.setGameMode(GameMode.CREATIVE);
+            if (!(player.getGameMode() == this.plugin.regionGamemode) || 
+                !this.plugin.playersChanged.containsKey(player)) {
+                    
+                this.plugin.playersChanged.put(player, player.getGameMode());
+                player.setGameMode(this.plugin.regionGamemode);
             }
-
         }
-        else if (this.plugin.waschanged.contains(player)) {
-            this.plugin.waschanged.remove(player);
-            player.setGameMode(GameMode.SURVIVAL);
+        else if (this.plugin.playersChanged.containsKey(player)) {
+            player.setGameMode(this.plugin.playersChanged.get(player));
+            this.plugin.playersChanged.remove(player);
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.waschanged.contains(player)) {
-            this.plugin.waschanged.remove(player);
-            player.setGameMode(GameMode.SURVIVAL);
+        if (this.plugin.playersChanged.containsKey(player)) {
+            player.setGameMode(this.plugin.playersChanged.get(player));
+            this.plugin.playersChanged.remove(player);
         }
     }
 
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.waschanged.contains(player)) {
-            this.plugin.waschanged.remove(player);
-            player.setGameMode(GameMode.SURVIVAL);
+        if (this.plugin.playersChanged.containsKey(player)) {
+            player.setGameMode(this.plugin.playersChanged.get(player));
+            this.plugin.playersChanged.remove(player);
         }
     }
 
@@ -68,8 +67,8 @@ public class WGListener implements Listener {
                 || (event.getInventory().getType().equals(InventoryType.FURNACE))
                 || (event.getInventory().getType().equals(InventoryType.PLAYER))
                 || (event.getInventory().getType().equals(InventoryType.WORKBENCH))) {
-            if (this.plugin.getConfig().getBoolean("StopInteract")) {
-                if (this.plugin.waschanged.contains(player)) {
+            if (this.plugin.getConfig().getBoolean("stopInteract")) {
+                if (this.plugin.playersChanged.containsKey(player)) {
                     event.setCancelled(true);
                 }
             }
@@ -79,8 +78,8 @@ public class WGListener implements Listener {
     @EventHandler
     public void onPlayerItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.getConfig().getBoolean("StopItemDrop")) {
-            if (this.plugin.waschanged.contains(player)) {
+        if (this.plugin.getConfig().getBoolean("stopItemDrop")) {
+            if (this.plugin.playersChanged.containsKey(player)) {
                 event.setCancelled(true);
             }
         }
