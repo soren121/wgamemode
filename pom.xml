@@ -5,6 +5,11 @@
     <artifactId>WGamemode</artifactId>
     <version>2.0.0</version>
     <packaging>jar</packaging>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -18,22 +23,26 @@
             </plugin>
         </plugins>
     </build>
+    
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
     </repositories>
+    
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.8.3-R0.1-SNAPSHOT</version>
         </dependency>
+        
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>worldguard</artifactId>
