@@ -1,6 +1,6 @@
 name: WGamemode
 authors: [Sinnoh, soren121]
-version: 2.0.0
+version: 2.0.1
 
 depend: [WorldGuard,WorldEdit]
 
