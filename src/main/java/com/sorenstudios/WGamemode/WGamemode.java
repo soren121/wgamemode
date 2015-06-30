@@ -44,7 +44,7 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
     }
 
     public void onEnable() {
-        instance = this;
+        //instance = this;
         getServer().getPluginManager().registerEvents(new WGListener(this), this);
         loadConfig();
         commands();
@@ -54,10 +54,12 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
     public void loadConfig() {
         List<String> list = new ArrayList();
         list.add("Gamemoderegion");
-        getConfig().addDefault("Regions", list);
-        getConfig().addDefault("StopItemDrop", true);
-        getConfig().addDefault("StopInteract", true);
-        getConfig().options().copyDefaults(true);
+        
+        FileConfiguration config = getConfig();
+        config.addDefault("Regions", list);
+        config.addDefault("StopItemDrop", true);
+        config.addDefault("StopInteract", true);
+        config.options().copyDefaults(true);
         saveConfig();
     }
 

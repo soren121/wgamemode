@@ -25,7 +25,7 @@ public class WGListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.isInRegion(player).booleanValue()) {
+        if (this.plugin.isInRegion(player)) {
             if ((player.getGameMode().equals(GameMode.SURVIVAL)) || (!this.plugin.waschanged.contains(player))) {
                 this.plugin.waschanged.add(player);
                 player.setGameMode(GameMode.CREATIVE);
