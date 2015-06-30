@@ -9,7 +9,6 @@ import com.sk89q.worldedit.bukkit.BukkitUtil;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import com.sorenstudios.WGamemode.commands.wgremove;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
@@ -41,7 +40,7 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
                 p.setGameMode(GameMode.SURVIVAL);
             }
         }
-        System.out.println("WGamemode v." + getDescription().getVersion() + " disabled!");
+        getLogger().info("Disabled successfully.");
     }
 
     public void onEnable() {
@@ -49,34 +48,34 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
         getServer().getPluginManager().registerEvents(new WGListener(this), this);
         loadConfig();
         commands();
-        System.out.println("WGamemode v." + getDescription().getVersion() + " enabled!");
+        getLogger().info("Loaded successfully!");
     }
 
     public void loadConfig() {
         List<String> list = new ArrayList();
         list.add("Gamemoderegion");
         getConfig().addDefault("Regions", list);
-        getConfig().addDefault("StopItemDrop", Boolean.valueOf(true));
-        getConfig().addDefault("StopInteract", Boolean.valueOf(true));
+        getConfig().addDefault("StopItemDrop", true);
+        getConfig().addDefault("StopInteract", true);
         getConfig().options().copyDefaults(true);
         saveConfig();
     }
 
     public void commands() {
         getCommand("wgadd").setExecutor(new com.sorenstudios.WGamemode.commands.wgadd());
-        getCommand("wgremove").setExecutor(new wgremove());
+        getCommand("wgremove").setExecutor(new com.sorenstudios.WGamemode.commands.wgremove());
     }
 
-    public Boolean isinregion(Player player) {
+    public boolean isInRegion(Player player) {
         RegionContainer container = getWorldGuard().getRegionContainer();
         RegionManager regions = container.get(player.getWorld());
 
         ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
         for (ProtectedRegion r : set) {
             if (getConfig().getList("Regions").contains(r.getId())) {
-                return Boolean.valueOf(true);
+                return true;
             }
         }
-        return Boolean.valueOf(false);
+        return false;
     }
 }
