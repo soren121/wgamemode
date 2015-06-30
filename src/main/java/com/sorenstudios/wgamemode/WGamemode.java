@@ -1,4 +1,4 @@
-package com.sorenstudios.WGamemode;
+package com.sorenstudios.wgamemode;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -48,22 +48,15 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
         getServer().getPluginManager().registerEvents(new WGListener(this), this);
         loadConfig();
         
-        getCommand("wgadd").setExecutor(new com.sorenstudios.WGamemode.commands.wgadd());
-        getCommand("wgremove").setExecutor(new com.sorenstudios.WGamemode.commands.wgremove());
+        getCommand("wgadd").setExecutor(new com.sorenstudios.wgamemode.commands.wgadd());
+        getCommand("wgremove").setExecutor(new com.sorenstudios.wgamemode.commands.wgremove());
         
         getLogger().info("Loaded successfully!");
     }
 
     public void loadConfig() {
-        List<String> list = new ArrayList();
-        list.add("Gamemoderegion");
-        
+        saveDefaultConfig();
         FileConfiguration config = getConfig();
-        config.addDefault("Regions", list);
-        config.addDefault("StopItemDrop", true);
-        config.addDefault("StopInteract", true);
-        config.options().copyDefaults(true);
-        saveConfig();
     }
 
     public boolean isInRegion(Player player) {

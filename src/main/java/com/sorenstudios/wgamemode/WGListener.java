@@ -1,4 +1,4 @@
-package com.sorenstudios.WGamemode;
+package com.sorenstudios.wgamemode;
 
 import java.util.List;
 import org.bukkit.GameMode;

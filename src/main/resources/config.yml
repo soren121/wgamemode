@@ -1,0 +1,4 @@
+Regions:
+- Gamemoderegion
+StopItemDrop: true
+StopInteract: true

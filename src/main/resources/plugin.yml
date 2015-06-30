@@ -4,7 +4,7 @@ version: 2.0.0
 
 depend: [WorldGuard,WorldEdit]
 
-main: com.sorenstudios.WGamemode.WGamemode
+main: com.sorenstudios.wgamemode.WGamemode
 
 commands:
     wgadd:
