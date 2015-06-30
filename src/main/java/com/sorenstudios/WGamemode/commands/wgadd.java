@@ -1,6 +1,5 @@
 package com.sorenstudios.WGamemode.commands;
 
-import java.io.PrintStream;
 import java.util.List;
 import com.sorenstudios.WGamemode.WGamemode;
 import org.bukkit.ChatColor;

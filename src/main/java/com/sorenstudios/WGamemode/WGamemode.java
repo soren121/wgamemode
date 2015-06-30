@@ -6,7 +6,6 @@ import com.sk89q.worldguard.bukkit.RegionContainer;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.GameMode;
@@ -44,10 +43,14 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
     }
 
     public void onEnable() {
-        //instance = this;
+        this.instance = this;
+        
         getServer().getPluginManager().registerEvents(new WGListener(this), this);
         loadConfig();
-        commands();
+        
+        getCommand("wgadd").setExecutor(new com.sorenstudios.WGamemode.commands.wgadd());
+        getCommand("wgremove").setExecutor(new com.sorenstudios.WGamemode.commands.wgremove());
+        
         getLogger().info("Loaded successfully!");
     }
 
@@ -63,14 +66,8 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
         saveConfig();
     }
 
-    public void commands() {
-        getCommand("wgadd").setExecutor(new com.sorenstudios.WGamemode.commands.wgadd());
-        getCommand("wgremove").setExecutor(new com.sorenstudios.WGamemode.commands.wgremove());
-    }
-
     public boolean isInRegion(Player player) {
-        RegionContainer container = getWorldGuard().getRegionContainer();
-        RegionManager regions = container.get(player.getWorld());
+        RegionManager regions = getWorldGuard().getRegionContainer().get(player.getWorld());
 
         ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
         for (ProtectedRegion r : set) {
