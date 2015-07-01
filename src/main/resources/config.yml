@@ -2,3 +2,4 @@ regions:
   gamemoderegion: "creative"
 stopItemDrop: true
 stopInteract: true
+announceGamemodeChange: true
