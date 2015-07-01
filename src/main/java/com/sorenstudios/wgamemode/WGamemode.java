@@ -15,7 +15,6 @@ import org.bukkit.plugin.Plugin;
 public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
 
     public Map<Player, GameMode> playersChanged = new HashMap<Player, GameMode>();
-    public static GameMode regionGamemode;
     public static WGamemode instance;
 
     public WorldGuardPlugin getWorldGuard() {
@@ -31,7 +30,7 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
     public void onDisable() {
         for (Map.Entry<Player, GameMode> entry : this.playersChanged.entrySet()) {
             Player p = entry.getKey();
-            if (p.getGameMode() == this.regionGamemode) {
+            if (p.getGameMode() != entry.getValue()) {
                 p.setGameMode(entry.getValue());
             }
         }
@@ -41,28 +40,34 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
 
     public void onEnable() {
         this.instance = this;
-        
         getServer().getPluginManager().registerEvents(new WGListener(this), this);
         
         saveDefaultConfig();
-        this.regionGamemode = GameMode.valueOf(getConfig().getString("gamemode").toUpperCase());
+        validateGamemodes();
         
         getCommand("wgadd").setExecutor(new com.sorenstudios.wgamemode.commands.wgadd());
         getCommand("wgremove").setExecutor(new com.sorenstudios.wgamemode.commands.wgremove());
         
         getLogger().info("Loaded successfully!");
     }
+    
+    private void validateGamemodes() {
+        Map<String, Object> regions = getConfig().getConfigurationSection("regions").getValues(false);
+        for (Map.Entry<String, Object> entry : regions.entrySet()) {
+            GameMode.valueOf(entry.getValue().toString().toUpperCase());
+        }
+    }
 
-    public boolean isInRegion(Player player) {
+    public String currentRegion(Player player) {
         RegionManager regions = getWorldGuard().getRegionContainer().get(player.getWorld());
 
         ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
         for (ProtectedRegion r : set) {
-            if (getConfig().getList("regions").contains(r.getId())) {
-                return true;
+            if (getConfig().getConfigurationSection("regions").isSet(r.getId())) {
+                return r.getId();
             }
         }
         
-        return false;
+        return null;
     }
 }

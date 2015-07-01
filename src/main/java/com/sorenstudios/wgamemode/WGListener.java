@@ -23,12 +23,16 @@ public class WGListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.isInRegion(player)) {
-            if (!(player.getGameMode() == this.plugin.regionGamemode) || 
+        String currentRegion = this.plugin.currentRegion(player);
+        if (currentRegion != null) {
+            GameMode regionGamemode = GameMode.valueOf(this.plugin.getConfig().
+                getConfigurationSection("regions").getString(currentRegion).toUpperCase());
+            
+            if (player.getGameMode() != regionGamemode || 
                 !this.plugin.playersChanged.containsKey(player)) {
                     
                 this.plugin.playersChanged.put(player, player.getGameMode());
-                player.setGameMode(this.plugin.regionGamemode);
+                player.setGameMode(regionGamemode);
             }
         }
         else if (this.plugin.playersChanged.containsKey(player)) {

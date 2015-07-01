@@ -1,5 +1,4 @@
 regions:
-- Gamemoderegion
+  gamemoderegion: "creative"
 stopItemDrop: true
 stopInteract: true
-gamemode: "creative"

@@ -1,6 +1,6 @@
 name: WGamemode
 authors: [Sinnoh, soren121]
-version: 2.0.1
+version: 2.1.0
 
 depend: [WorldGuard,WorldEdit]
 
@@ -8,7 +8,7 @@ main: com.sorenstudios.wgamemode.WGamemode
 
 commands:
     wgadd:
-        usage: /wgadd [region]
+        usage: /wgadd [region] [gamemode]
         description: Add a region to the list
     wgremove:
         usage: /wgremove [region]
