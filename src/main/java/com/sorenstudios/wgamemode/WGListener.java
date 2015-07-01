@@ -1,7 +1,7 @@
 package com.sorenstudios.wgamemode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.Inventory;
 public class WGListener implements Listener {
 
     private WGamemode plugin;
-    private Map<Player,String> lastRegion = new HashMap<Player,String>();
+    private List<Player> enteredRegion = new ArrayList<Player>();
 
     public WGListener(WGamemode instance) {
         this.plugin = instance;
@@ -33,7 +33,7 @@ public class WGListener implements Listener {
                 getConfigurationSection("regions").getString(currentRegion).toUpperCase());
             
             if (player.getGameMode() != regionGamemode) {
-                if(this.lastRegion.get(player) == null) {
+                if(!this.enteredRegion.contains(player)) {
                     this.plugin.playersChanged.put(player, player.getGameMode());
                 }
                 
@@ -45,7 +45,7 @@ public class WGListener implements Listener {
                 }
             }
             
-            lastRegion.put(player, currentRegion);
+            this.enteredRegion.add(player);
         }
         else if (this.plugin.playersChanged.containsKey(player)) {
             if (this.plugin.getConfig().getBoolean("announceGamemodeChange")) {
@@ -56,7 +56,7 @@ public class WGListener implements Listener {
             player.setGameMode(this.plugin.playersChanged.get(player));
             this.plugin.playersChanged.remove(player);
             
-            this.lastRegion.remove(player);
+            this.enteredRegion.remove(player);
         }
     }
 
