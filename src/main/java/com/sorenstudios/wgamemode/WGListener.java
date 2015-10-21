@@ -81,15 +81,16 @@ public class WGListener implements Listener {
     @EventHandler
     public void onPlayerOpenInventory(InventoryOpenEvent event) {
         Player player = (Player) event.getPlayer();
+        InventoryType objType = event.getInventory().getType();
 
-        if ((event.getInventory().getType().equals(InventoryType.BREWING))
-                || (event.getInventory().getType().equals(InventoryType.CHEST))
-                || (event.getInventory().getType().equals(InventoryType.CRAFTING))
-                || (event.getInventory().getType().equals(InventoryType.DISPENSER))
-                || (event.getInventory().getType().equals(InventoryType.ENCHANTING))
-                || (event.getInventory().getType().equals(InventoryType.FURNACE))
-                || (event.getInventory().getType().equals(InventoryType.PLAYER))
-                || (event.getInventory().getType().equals(InventoryType.WORKBENCH))) {
+        if ((objType.equals(InventoryType.BREWING))
+                || (objType.equals(InventoryType.CHEST))
+                || (objType.equals(InventoryType.CRAFTING))
+                || (objType.equals(InventoryType.DISPENSER))
+                || (objType.equals(InventoryType.ENCHANTING))
+                || (objType.equals(InventoryType.FURNACE))
+                || (objType.equals(InventoryType.PLAYER))
+                || (objType.equals(InventoryType.WORKBENCH))) {
             if (this.plugin.getConfig().getBoolean("stopInteract")) {
                 if (this.plugin.playersChanged.containsKey(player)) {
                     event.setCancelled(true);
