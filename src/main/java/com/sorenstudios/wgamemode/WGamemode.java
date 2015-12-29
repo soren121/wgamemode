@@ -49,9 +49,9 @@ public class WGamemode extends JavaPlugin {
     public void onDisable() {
         // Return all players to their original gamemodes to avoid potential issues
         for (Map.Entry<Player, GameMode> entry : this.playersChanged.entrySet()) {
-            Player p = entry.getKey();
-            if (p.getGameMode() != entry.getValue()) {
-                p.setGameMode(entry.getValue());
+            Player player = entry.getKey();
+            if (player.getGameMode() != entry.getValue()) {
+                player.setGameMode(entry.getValue());
             }
         }
         
@@ -73,7 +73,14 @@ public class WGamemode extends JavaPlugin {
     private void validateGamemodes() {
         Map<String, Object> regions = getConfig().getConfigurationSection("regions").getValues(false);
         for (Map.Entry<String, Object> entry : regions.entrySet()) {
-            GameMode.valueOf(entry.getValue().toString().toUpperCase());
+            // Purposely throw fatal exception if gamemode does not exist
+            try {
+                GameMode.valueOf(entry.getValue().toString().toUpperCase());
+            }
+            catch(IllegalArgumentException | NullPointerException e) {
+                throw new IllegalArgumentException(
+                    "Invalid gamemode specified in config.yml for region '" + entry.getKey() + "'");
+            }
         }
     }
 

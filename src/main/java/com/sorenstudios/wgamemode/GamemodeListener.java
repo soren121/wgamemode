@@ -19,12 +19,9 @@
 package com.sorenstudios.wgamemode;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -35,7 +32,7 @@ import org.bukkit.GameMode;
 public class GamemodeListener implements Listener {
 
     private WGamemode plugin;
-    private List<Player> enteredRegion = new ArrayList<Player>();
+    private ArrayList<Player> enteredRegion = new ArrayList<Player>();
 
     public GamemodeListener(WGamemode instance) {
         this.plugin = instance;
@@ -45,8 +42,8 @@ public class GamemodeListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         
-        String currentRegion = this.plugin.currentRegion(player);
         // Check if the player is currently in a region we're managing
+        String currentRegion = this.plugin.currentRegion(player);
         if (currentRegion != null) {
             GameMode regionGamemode = GameMode.valueOf(this.plugin.getConfig().
                 getConfigurationSection("regions").getString(currentRegion).toUpperCase());
