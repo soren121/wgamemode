@@ -37,7 +37,7 @@ public class RemoveRegion implements CommandExecutor {
         // If a player is calling this command, check their permissions
         // No need to check for console-issued commands
         if (sender instanceof Player && !((Player)sender).hasPermission("wgamemode.remove")) {
-            sender.sendMessage(ChatColor.RED + "No permissions!");
+            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
         }
         // Verify that argument length is correct
         else if (args.length >= 1) {
@@ -49,10 +49,11 @@ public class RemoveRegion implements CommandExecutor {
                 regions.set(regionName, null);
                 this.plugin.saveConfig();
                 
-                sender.sendMessage(ChatColor.DARK_GREEN + "Removed region " + regionName);
+                sender.sendMessage(ChatColor.DARK_GREEN + 
+                    "Removed automatic gamemode rule for region '" + regionName + "'");
             }
             else if(!regions.isSet(regionName)) {
-                sender.sendMessage(ChatColor.RED + "This region is not listed!");
+                sender.sendMessage(ChatColor.RED + "That region is not managed by WGamemode.");
             }
             else {
                 // Returning false means the command failed unexpectedly

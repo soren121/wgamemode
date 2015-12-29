@@ -38,7 +38,7 @@ public class AddRegion implements CommandExecutor {
         // If a player is calling this command, check their permissions
         // No need to check for console-issued commands
         if (sender instanceof Player && !((Player)sender).hasPermission("wgamemode.add")) {
-            sender.sendMessage(ChatColor.RED + "No permissions!");
+            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
         }
         // Verify that argument length is correct
         else if (args.length >= 2) {
