@@ -27,6 +27,7 @@ public class WGamemode extends JavaPlugin {
     }
 
     public void onDisable() {
+        // Return all players to their original gamemodes to avoid potential issues
         for (Map.Entry<Player, GameMode> entry : this.playersChanged.entrySet()) {
             Player p = entry.getKey();
             if (p.getGameMode() != entry.getValue()) {

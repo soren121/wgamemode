@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.GameMode;
-import org.bukkit.inventory.Inventory;
 
 public class GamemodeListener implements Listener {
 
