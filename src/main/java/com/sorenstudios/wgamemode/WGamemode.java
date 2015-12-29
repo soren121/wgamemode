@@ -19,12 +19,13 @@
 package com.sorenstudios.wgamemode;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.entity.Player;
 import org.bukkit.GameMode;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -80,15 +81,19 @@ public class WGamemode extends JavaPlugin {
         RegionManager regions = getWorldGuard().getRegionContainer().get(player.getWorld());
         Vector playerLocation = BukkitUtil.toVector(player.getLocation());
         
-        for (ProtectedRegion region : regions.getApplicableRegions(playerLocation)) {
-            if (getConfig().getConfigurationSection("regions").isSet(region.getId())) {
-                // Return the first region ID that matches the player's position
-                return region.getId();
-            }
-        }
+        List<String> playerRegions = regions.getApplicableRegionsIDs(playerLocation);
+        Set<String> managedRegions = getConfig().getConfigurationSection("regions").getKeys(false);
         
-        // If the player is not in any WGamemode region, return null
-        return null;
+        // Diff the two region lists
+        playerRegions.retainAll(managedRegions);
+        // Use first result
+        if(playerRegions.size() > 0) {
+            return playerRegions.get(0);
+        }
+        else {
+            // If the player is not in any WGamemode region, return null
+            return null;
+        }
     }
     
 }
