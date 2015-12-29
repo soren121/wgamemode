@@ -1,4 +1,4 @@
 regions:
   exampleregion: "creative"
-stopItemDrop: true
+stopItemDrop: false
 announceGamemodeChange: true
