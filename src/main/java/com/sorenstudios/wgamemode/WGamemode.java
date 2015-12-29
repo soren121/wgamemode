@@ -37,11 +37,12 @@ public class WGamemode extends JavaPlugin {
     public WorldGuardPlugin getWorldGuard() {
         Plugin worldGuard = getServer().getPluginManager().getPlugin("WorldGuard");
 
-        if (worldGuard == null || !(worldGuard instanceof WorldGuardPlugin)) {
+        if (worldGuard instanceof WorldGuardPlugin) {
+            return (WorldGuardPlugin)worldGuard;
+        }
+        else {
             return null;
         }
-
-        return (WorldGuardPlugin)worldGuard;
     }
 
     public void onDisable() {

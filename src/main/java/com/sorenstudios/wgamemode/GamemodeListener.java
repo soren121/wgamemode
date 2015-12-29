@@ -44,12 +44,16 @@ public class GamemodeListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        
         String currentRegion = this.plugin.currentRegion(player);
+        // Check if the player is currently in a region we're managing
         if (currentRegion != null) {
             GameMode regionGamemode = GameMode.valueOf(this.plugin.getConfig().
                 getConfigurationSection("regions").getString(currentRegion).toUpperCase());
             
+            // If their gamemode doesn't match the region's gamemode, change it!
             if (player.getGameMode() != regionGamemode) {
+                // Add player to the list of mutated players
                 if(!this.enteredRegion.contains(player)) {
                     this.plugin.playersChanged.put(player, player.getGameMode());
                 }
@@ -62,14 +66,17 @@ public class GamemodeListener implements Listener {
                 }
             }
             
+            // Mark this player as having entered a managed region
             this.enteredRegion.add(player);
         }
+        // If the user isn't in a region we manage, see if we've updated their status yet
         else if (this.plugin.playersChanged.containsKey(player)) {
             if (this.plugin.getConfig().getBoolean("announceGamemodeChange")) {
                 player.sendMessage(ChatColor.YELLOW + "Leaving " + 
                     player.getGameMode().name().toLowerCase() + " area");
             }
             
+            // We haven't, so do that now
             player.setGameMode(this.plugin.playersChanged.get(player));
             this.plugin.playersChanged.remove(player);
             

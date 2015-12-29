@@ -71,6 +71,7 @@ public class AddRegion implements CommandExecutor {
             return true;
         }
         else {
+            // Returning false means the command failed unexpectedly
             return false;
         }
     }

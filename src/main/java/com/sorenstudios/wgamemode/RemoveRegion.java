@@ -59,11 +59,12 @@ public class RemoveRegion implements CommandExecutor {
                 return false;
             }
             
-            // Notify user of success
+            // Notify player of success
             sender.sendMessage(ChatColor.DARK_GREEN + "Removed region " + regionName);
             return true;
         }
         else {
+            // Returning false means the command failed unexpectedly
             return false;
         }
     }
