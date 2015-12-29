@@ -38,11 +38,9 @@ public class RemoveRegion implements CommandExecutor {
         // No need to check for console-issued commands
         if (sender instanceof Player && !((Player)sender).hasPermission("wgamemode.remove")) {
             sender.sendMessage(ChatColor.RED + "No permissions!");
-            return true;
         }
-        
         // Verify that argument length is correct
-        if (args.length >= 1) {
+        else if (args.length >= 1) {
             String regionName = args[0];
             ConfigurationSection regions = this.plugin.getConfig().getConfigurationSection("regions");
             
@@ -50,23 +48,19 @@ public class RemoveRegion implements CommandExecutor {
             if (regions != null && regions.isSet(regionName)) {
                 regions.set(regionName, null);
                 this.plugin.saveConfig();
+                
+                sender.sendMessage(ChatColor.DARK_GREEN + "Removed region " + regionName);
             }
             else if(!regions.isSet(regionName)) {
                 sender.sendMessage(ChatColor.RED + "This region is not listed!");
-                return true;
             }
             else {
+                // Returning false means the command failed unexpectedly
                 return false;
             }
-            
-            // Notify player of success
-            sender.sendMessage(ChatColor.DARK_GREEN + "Removed region " + regionName);
-            return true;
         }
-        else {
-            // Returning false means the command failed unexpectedly
-            return false;
-        }
+        
+        return true;
     }
     
 }

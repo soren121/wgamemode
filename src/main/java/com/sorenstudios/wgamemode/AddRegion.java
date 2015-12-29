@@ -39,41 +39,41 @@ public class AddRegion implements CommandExecutor {
         // No need to check for console-issued commands
         if (sender instanceof Player && !((Player)sender).hasPermission("wgamemode.add")) {
             sender.sendMessage(ChatColor.RED + "No permissions!");
-            return true;
         }
-        
         // Verify that argument length is correct
-        if (args.length >= 2) {
+        else if (args.length >= 2) {
             String regionName = args[0];
             String regionGamemode = args[1];
             
             // Verify that the gamemode given is valid
-            try {
-                GameMode.valueOf(regionGamemode.toUpperCase());
-            }
-            catch(IllegalArgumentException | NullPointerException e) {
-                sender.sendMessage(ChatColor.RED + "Invalid gamemode. Try again.");
-                return true;
+            // (why does Java not have an Enum.contains method...?)
+            boolean gamemodeValid = false;
+            for (GameMode gm : GameMode.values()) {
+                if (gm.name().equals(regionGamemode.toUpperCase())) {
+                    gamemodeValid = true;
+                    break;
+                }
             }
             
             // Add region to config file & save
             ConfigurationSection regions = this.plugin.getConfig().getConfigurationSection("regions");
-            if(regions != null) {
+            if(regions != null && gamemodeValid) {
                 regions.set(regionName, regionGamemode);
                 this.plugin.saveConfig();
+                
+                sender.sendMessage(ChatColor.DARK_GREEN + 
+                    "Added automatic gamemode rule for region '" + regionName + "'");
+            }
+            else if(!gamemodeValid) {
+                sender.sendMessage(ChatColor.RED + "Invalid gamemode. Try again.");
             }
             else {
+                // Returning false means the command failed unexpectedly
                 return false;
             }
-            
-            // Notify player of success
-            sender.sendMessage(ChatColor.DARK_GREEN + "Added region " + regionName);
-            return true;
         }
-        else {
-            // Returning false means the command failed unexpectedly
-            return false;
-        }
+        
+        return true;
     }
     
 }

@@ -9,7 +9,7 @@ main: com.sorenstudios.wgamemode.WGamemode
 commands:
     wgadd:
         usage: /wgadd [region] [gamemode]
-        description: Add a region to the list
+        description: Adds a WorldGuard region to the automatic gamemode list
     wgremove:
         usage: /wgremove [region]
-        description: Remove a region to the list
+        description: Removes a WorldGuard region from the automatic gamemode list
