@@ -39,10 +39,10 @@ This plugin has three settings:
      townsquare: "adventure"
      cathedral: "creative"
    ```
- * *stopItemDrop*: Boolean (true/false). Prevents item drops in WGamemode-managed 
-   regions.
+ * *stopItemDrop*: Boolean (true/false). If true, prevents item drops in 
+   WGamemode-managed regions. Default is false.
  * *announceGamemodeChange*: Boolean (true/false). The plugin will tell players 
-   when they are entering or exiting a WGamemode-managed region.
+   when they are entering or exiting a WGamemode-managed region. Default is true.
    
 An example is provided [here](https://github.com/soren121/wgamemode/blob/master/src/main/resources/config.yml).
 That same example is also automatically generated in your server's `plugins` 
@@ -52,18 +52,23 @@ directory when the plugin is run for the first time.
 
 And it has two in-game commands that do what you expect:
 
- * */wgadd [region] [gamemode]* - Adds a region to WGamemode's region list.
- * */wgremove [region]* - Removes a region from WGamemode's region list.
+| **Command** | **Permission** | **Description** |
+|-----------|------------------|------------------------------------------------|
+| /wgadd [region] [gamemode] | wgamemode.add | Adds a region to WGamemode's region list. |
+| /wgremove [region] | wgamemode.remove | Removes a region from WGamemode's region list. |
  
 ## Building from source
 
-To build this plugin from source, you'll need to install JDK 7+ and Maven 3.0+.  
-WGamemode uses the standard Maven lifecycle commands.
+To build this plugin from source, you'll need to install JDK 7+ and Maven 3.0+.
 
-To compile:
+WGamemode uses the standard [Maven lifecycle commands](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html).
 
+#### To compile:  
+ 
     $ mvn compile
     
-To build a JAR (for use with Spigot):
-
+#### To build a JAR (for use with Spigot):  
+ 
     $ mvn package
+
+Your JAR file will be in the `target` directory.
