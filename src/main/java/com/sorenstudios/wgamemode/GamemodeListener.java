@@ -103,27 +103,6 @@ public class GamemodeListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerOpenInventory(InventoryOpenEvent event) {
-        Player player = (Player)event.getPlayer();
-        if(this.plugin.getConfig().getBoolean("stopInteract") && 
-            this.plugin.playersChanged.containsKey(player)) {
-
-            InventoryType objType = event.getInventory().getType();
-            if (objType.equals(InventoryType.BREWING) ||
-                objType.equals(InventoryType.CHEST) ||
-                objType.equals(InventoryType.CRAFTING) ||
-                objType.equals(InventoryType.DISPENSER) ||
-                objType.equals(InventoryType.ENCHANTING) ||
-                objType.equals(InventoryType.FURNACE) ||
-                objType.equals(InventoryType.PLAYER) ||
-                objType.equals(InventoryType.WORKBENCH)) {
-                        
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
     public void onPlayerItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         if (this.plugin.getConfig().getBoolean("stopItemDrop") && 
