@@ -15,12 +15,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.GameMode;
 import org.bukkit.inventory.Inventory;
 
-public class WGListener implements Listener {
+public class GamemodeListener implements Listener {
 
     private WGamemode plugin;
     private List<Player> enteredRegion = new ArrayList<Player>();
 
-    public WGListener(WGamemode instance) {
+    public GamemodeListener(WGamemode instance) {
         this.plugin = instance;
     }
 
@@ -80,21 +80,21 @@ public class WGListener implements Listener {
 
     @EventHandler
     public void onPlayerOpenInventory(InventoryOpenEvent event) {
-        Player player = (Player) event.getPlayer();
-        InventoryType objType = event.getInventory().getType();
+        Player player = (Player)event.getPlayer();
+        if(this.plugin.getConfig().getBoolean("stopInteract") && 
+            this.plugin.playersChanged.containsKey(player)) {
 
-        if ((objType.equals(InventoryType.BREWING))
-                || (objType.equals(InventoryType.CHEST))
-                || (objType.equals(InventoryType.CRAFTING))
-                || (objType.equals(InventoryType.DISPENSER))
-                || (objType.equals(InventoryType.ENCHANTING))
-                || (objType.equals(InventoryType.FURNACE))
-                || (objType.equals(InventoryType.PLAYER))
-                || (objType.equals(InventoryType.WORKBENCH))) {
-            if (this.plugin.getConfig().getBoolean("stopInteract")) {
-                if (this.plugin.playersChanged.containsKey(player)) {
-                    event.setCancelled(true);
-                }
+            InventoryType objType = event.getInventory().getType();
+            if (objType.equals(InventoryType.BREWING) ||
+                objType.equals(InventoryType.CHEST) ||
+                objType.equals(InventoryType.CRAFTING) ||
+                objType.equals(InventoryType.DISPENSER) ||
+                objType.equals(InventoryType.ENCHANTING) ||
+                objType.equals(InventoryType.FURNACE) ||
+                objType.equals(InventoryType.PLAYER) ||
+                objType.equals(InventoryType.WORKBENCH)) {
+                        
+                event.setCancelled(true);
             }
         }
     }
@@ -102,10 +102,11 @@ public class WGListener implements Listener {
     @EventHandler
     public void onPlayerItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.getConfig().getBoolean("stopItemDrop")) {
-            if (this.plugin.playersChanged.containsKey(player)) {
-                event.setCancelled(true);
-            }
+        if (this.plugin.getConfig().getBoolean("stopItemDrop") && 
+            this.plugin.playersChanged.containsKey(player)) {
+                
+            event.setCancelled(true);
         }
     }
+    
 }

@@ -1,30 +1,29 @@
 package com.sorenstudios.wgamemode;
 
-import com.sk89q.worldedit.bukkit.BukkitUtil;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.bukkit.BukkitUtil;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.entity.Player;
 import org.bukkit.GameMode;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 
-public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
+public class WGamemode extends JavaPlugin {
 
     public Map<Player, GameMode> playersChanged = new HashMap<Player, GameMode>();
-    public static WGamemode instance;
 
     public WorldGuardPlugin getWorldGuard() {
-        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+        Plugin worldGuard = getServer().getPluginManager().getPlugin("WorldGuard");
 
-        if ((plugin == null) || (!(plugin instanceof WorldGuardPlugin))) {
+        if (worldGuard == null || !(worldGuard instanceof WorldGuardPlugin)) {
             return null;
         }
 
-        return (WorldGuardPlugin) plugin;
+        return (WorldGuardPlugin)worldGuard;
     }
 
     public void onDisable() {
@@ -39,14 +38,13 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
     }
 
     public void onEnable() {
-        this.instance = this;
-        getServer().getPluginManager().registerEvents(new WGListener(this), this);
-        
         saveDefaultConfig();
         validateGamemodes();
         
-        getCommand("wgadd").setExecutor(new com.sorenstudios.wgamemode.commands.wgadd());
-        getCommand("wgremove").setExecutor(new com.sorenstudios.wgamemode.commands.wgremove());
+        // Set event listeners
+        getServer().getPluginManager().registerEvents(new GamemodeListener(this), this);
+        getCommand("wgadd").setExecutor(new AddRegion(this));
+        getCommand("wgremove").setExecutor(new RemoveRegion(this));
         
         getLogger().info("Loaded successfully!");
     }
@@ -60,14 +58,17 @@ public class WGamemode extends org.bukkit.plugin.java.JavaPlugin {
 
     public String currentRegion(Player player) {
         RegionManager regions = getWorldGuard().getRegionContainer().get(player.getWorld());
-
-        ApplicableRegionSet set = regions.getApplicableRegions(BukkitUtil.toVector(player.getLocation()));
-        for (ProtectedRegion r : set) {
-            if (getConfig().getConfigurationSection("regions").isSet(r.getId())) {
-                return r.getId();
+        Vector playerLocation = BukkitUtil.toVector(player.getLocation());
+        
+        for (ProtectedRegion region : regions.getApplicableRegions(playerLocation)) {
+            if (getConfig().getConfigurationSection("regions").isSet(region.getId())) {
+                // Return the first region ID that matches the player's position
+                return region.getId();
             }
         }
         
+        // If the player is not in any WGamemode region, return null
         return null;
     }
+    
 }
