@@ -1,8 +1,9 @@
 name: WGamemode
-authors: [soren121]
 version: 2.2.0
+authors: [soren121]
+website: https://github.com/soren121/wgamemode
 
-depend: [WorldGuard,WorldEdit]
+depend: [WorldGuard, WorldEdit]
 
 main: com.sorenstudios.wgamemode.WGamemode
 
@@ -10,6 +11,21 @@ commands:
     wgadd:
         usage: /wgadd [region] [gamemode]
         description: Adds a WorldGuard region to the automatic gamemode list
+        permission: wgamemode.add
+        permission-message: "You don't have permission to use this command."
     wgremove:
         usage: /wgremove [region]
         description: Removes a WorldGuard region from the automatic gamemode list
+        permission: wgamemode.remove
+        permission-message: "You don't have permission to use this command."
+
+permissions:
+    wgamemode.*:
+        description: Gives access to all WGamemode commands
+        children:
+            wgamemode.add: true
+            wgamemode.remove: true
+    wgamemode.add:
+        description: Allows you to use /wgadd
+    wgamemode.remove:
+        description: Allows you to use /wgremove

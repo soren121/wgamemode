@@ -22,7 +22,10 @@ This plugin requires that you install WorldEdit 6+ and WorldGuard 6.1+ on your s
 The only supported MC server is Spigot 1.8+. Tested with 1.8.8 only, though it should 
 work with earlier 1.8 versions too.
 
-### config.yml
+**Warning: Adding multiple regions that overlap may result in undesired/undefined 
+behavior.** Do not add a region that overlaps another added region.
+
+### Configuration
 
 You don't have to manually configure any settings in the plugin's `config.yml` 
 file, but you can if you want.
@@ -50,7 +53,7 @@ directory when the plugin is run for the first time.
 
 ### Commands
 
-And it has two in-game commands that do what you expect:
+WGamemode has two in-game commands that do what you expect:
 
 | **Command** | **Permission** | **Description** |
 |-----------|------------------|------------------------------------------------|

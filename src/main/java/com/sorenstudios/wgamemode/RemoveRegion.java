@@ -23,7 +23,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 public class RemoveRegion implements CommandExecutor {
 
@@ -34,13 +33,8 @@ public class RemoveRegion implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // If a player is calling this command, check their permissions
-        // No need to check for console-issued commands
-        if (sender instanceof Player && !((Player)sender).hasPermission("wgamemode.remove")) {
-            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
-        }
         // Verify that argument length is correct
-        else if (args.length >= 1) {
+        if (args.length >= 1) {
             String regionName = args[0];
             ConfigurationSection regions = this.plugin.getConfig().getConfigurationSection("regions");
             

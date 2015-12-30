@@ -33,8 +33,8 @@ import org.bukkit.plugin.Plugin;
 
 public class WGamemode extends JavaPlugin {
 
-    public Map<Player, GameMode> playersChanged = new HashMap<Player, GameMode>();
-
+    public Map<Player, GameMode> playersChanged;
+    
     public WorldGuardPlugin getWorldGuard() {
         Plugin worldGuard = getServer().getPluginManager().getPlugin("WorldGuard");
 
@@ -44,30 +44,6 @@ public class WGamemode extends JavaPlugin {
         else {
             return null;
         }
-    }
-
-    public void onDisable() {
-        // Return all players to their original gamemodes to avoid potential issues
-        for (Map.Entry<Player, GameMode> entry : this.playersChanged.entrySet()) {
-            Player player = entry.getKey();
-            if (player.getGameMode() != entry.getValue()) {
-                player.setGameMode(entry.getValue());
-            }
-        }
-        
-        getLogger().info("Player gamemodes returned to original values");
-    }
-
-    public void onEnable() {
-        saveDefaultConfig();
-        validateGamemodes();
-        
-        // Set event listeners
-        getServer().getPluginManager().registerEvents(new GamemodeListener(this), this);
-        getCommand("wgadd").setExecutor(new AddRegion(this));
-        getCommand("wgremove").setExecutor(new RemoveRegion(this));
-        
-        getLogger().info("Loaded successfully!");
     }
     
     private void validateGamemodes() {
@@ -82,6 +58,32 @@ public class WGamemode extends JavaPlugin {
                     "Invalid gamemode specified in config.yml for region '" + entry.getKey() + "'");
             }
         }
+    }
+    
+    public void onEnable() {
+        saveDefaultConfig();
+        validateGamemodes();
+        
+        this.playersChanged = new HashMap<Player, GameMode>((int)(getServer().getMaxPlayers() / 0.75f + 1));
+        
+        // Set event listeners
+        getServer().getPluginManager().registerEvents(new GamemodeListener(this), this);
+        getCommand("wgadd").setExecutor(new AddRegion(this));
+        getCommand("wgremove").setExecutor(new RemoveRegion(this));
+        
+        getLogger().info("Loaded successfully!");
+    }
+
+    public void onDisable() {
+        // Return all players to their original gamemodes to avoid potential issues
+        for (Map.Entry<Player, GameMode> entry : this.playersChanged.entrySet()) {
+            Player player = entry.getKey();
+            if (player.getGameMode() != entry.getValue()) {
+                player.setGameMode(entry.getValue());
+            }
+        }
+        
+        getLogger().info("Player gamemodes returned to original values");
     }
 
     public String currentRegion(Player player) {
